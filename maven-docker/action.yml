@@ -1,0 +1,18 @@
+name: 'Publish Docker Image with Maven'
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS Credentials (ECR)
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.BUILD_EPI_EXPT_AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.BUILD_EPI_EXPT_AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Publish Docker Image
+      run:
+        - GIT_SHORT_HASH:=$(shell git rev-parse --short HEAD)
+        - mvn -Dgit.short.hash=$(GIT_SHORT_HASH) dockerfile:build
+        - mvn -Dgit.short.hash=$(GIT_SHORT_HASH) dockerfile:push
