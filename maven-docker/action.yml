@@ -1,13 +1,21 @@
 name: 'Publish Docker Image with Maven'
+inputs:
+  aws-access-key-id:
+    required: true
+  aws-secret-access-key:
+    required: true
+  aws-region:
+    required: true
+    default: eu-west-1
 runs:
   using: "composite"
   steps:
     - name: Configure AWS Credentials (ECR)
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.BUILD_EPI_EXPT_AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.BUILD_EPI_EXPT_AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-1
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
