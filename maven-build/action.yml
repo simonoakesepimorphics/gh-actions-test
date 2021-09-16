@@ -31,4 +31,5 @@ runs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
     - name: Maven build and test
+      shell: bash
       run: mvn clean test
