@@ -20,6 +20,7 @@ runs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     - name: Publish Docker Image
+      shell: bash
       run:
         - GIT_SHORT_HASH:=$(shell git rev-parse --short HEAD)
         - mvn -Dgit.short.hash=$(GIT_SHORT_HASH) dockerfile:build
